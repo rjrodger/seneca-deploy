@@ -1,0 +1,92 @@
+
+
+definitions:
+unit: account + application + version
+install: single installation of unit on a container => one install per container
+installed container: container has files for unit
+clean container: container has no unit files - ready for use
+
+
+primary implementation: separate folders on same machine == container
+(seneca-docker extends this to docker containers)
+
+assume static setup - machines. folders, node etc already setup
+
+
+store current config in local leveldb so seneca-deploy server can stop/start by itself
+
+deploy server has no global knowledge - only knows about apps it is told to install
+driven by seneca-cloud
+
+
+
+mappings:
+
+container -> app
+where:
+- container = machine+folder
+- app = acc/app/ver OR empty
+
+
+container -> folder, port
+
+acc -> app -> ver -> metadata
+
+acc/app/ver -> unit installs
+where
+- unit install = container, status
+
+
+
+# add a machine with containers
+# role:deploy: cmd:add, item:machine, containers:[...]
+  - containers are: {folder:..., port:...}
+
+
+# install acc/app/ver
+# role:deploy, cmd:install, unit:app/app/ver, [count:X], repo:github commit
+  - git clone to clean container(s)
+  - configure upstart
+  - inform master of install
+  - clean old container(s) (if used)
+  - count gives number of installs to use
+
+# start acc/app/ver
+# role:deploy, cmd:start, unit:app/app/ver
+  - start all unit installs
+  - inform masters
+
+# stop acc/app/ver
+# role:deploy, cmd:stop, unit:app/app/ver
+  - stop all unit installs
+  - inform masters
+
+# kick acc/app/ver
+# role:deploy, cmd:kick, unit:app/app/ver
+  - stop and start all unit installs
+
+# remove acc/app/ver
+# role:deploy, cmd:remove, unit:app/app/ver
+  - inform masters
+  - stop all unit installs
+  - clean containers
+
+# change acc/app/ver install count
+# role:deploy, cmd:count, unit:app/app/ver, count:X
+  - stop unit installs if > X, random
+  - install and start unit installs if < X,
+  - inform masters
+
+
+# clear current config
+# role:deploy, cmd:clear
+  - remove all mappings
+
+
+
+
+
+
+
+
+
