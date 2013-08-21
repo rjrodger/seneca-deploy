@@ -1,0 +1,21 @@
+{
+  "name": "seneca-docker",
+  "version": "0.0.0",
+  "description": "Seneca-based Docker Management",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "express": "~3.3.5",
+    "seneca": "~0.5.9",
+    "seneca-user": "~0.2.2",
+    "seneca-auth": "~0.2.5",
+    "seneca-perm": "~0.1.1",
+    "seneca-data-editor": "~0.1.2",
+    "hyperquest": "~0.1.7",
+    "rc": "~0.3.0"
+  }
+}
