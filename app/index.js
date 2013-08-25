@@ -24,7 +24,7 @@ module.exports = function deploy(opts) {
       role : name
       , cmd : method
 
-    }, methods[method])
+    }, methods[method](opts))
 
   })
 

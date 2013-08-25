@@ -5,37 +5,42 @@
 var request = require('request')
 
 module.exports = install;
-function install(args, cb) {
 
-  var args = args || { }
+/* receive resources from config */
+function install(res) {
 
-  // args.unit = args.unit || { }
-  // var app = args.unit.app
-  // var account = args.unit.acc
-  // var version = args.unit.ver
+  return function(args, cb) {
 
-  // var repo = args.req$.query.user + '/' + args.req$.query.app
+    var args = args || { }
 
-  // no care for query/req stuff; assume args.user/app
-  console.log(args)
-  // request({
+    // args.unit = args.unit || { }
+    // var app = args.unit.app
+    // var account = args.unit.acc
+    // var version = args.unit.ver
 
-  //   url : 'https://api.github.com/repos/' + repo + '/tarball'
-  //   , auth : {
-  //     'user' : 'nexxy'
-  //     , 'pass' : '313fa0324bf255d14603aec48cd9c4d0cf88348f'
-  //   }
+    // var repo = args.req$.query.user + '/' + args.req$.query.app
 
-  // }).pipe(process.stdout)
+    // no care for query/req stuff; assume args.user/app
+    console.log(args)
+    // request({
 
-  // console.log(app, user)
+    //   url : 'https://api.github.com/repos/' + repo + '/tarball'
+    //   , auth : {
+    //     'user' : 'nexxy'
+    //     , 'pass' : '313fa0324bf255d14603aec48cd9c4d0cf88348f'
+    //   }
 
-  // TODO: validate container count perms
-  // TODO: validate repo
+    // }).pipe(process.stdout)
+
+    // console.log(app, user)
+
+    // TODO: validate container count perms
+    // TODO: validate repo
 
 
-  // TODO: unpack & add to image
-  // return image id
+    // TODO: unpack & add to image
+    // return image id
 
-  cb(null, true)
+    cb(null, true)
+  }
 }
