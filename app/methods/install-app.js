@@ -1,46 +1,79 @@
 /**
- * Install a new docker app
+ * Install an app
  */
 
-var request = require('request')
+var fs = require('fs')
+var mkdirp = require('mkdirp')
+var tarStream = require('../tarball-stream')
+var spawn = require('child_process').spawn
+var exec = require('child_process').exec
+var path = require('path')
+var uuid = require('node-uuid')
+var conf = require('rc')('deploy')
 
-module.exports = install;
+module.exports = install
+/**
+ * Create a docker image from the tarball of the specified repository
+ * @param {Object} args Arguments object
+ * @param {String} args.repo Github repo name of application to install
+ * @param {String} args.user Github username of application to install
+ * @param {String} args.token Github OAuth token to use for private repos
+ * @param {Function} cb Callback, called with id of image created for app
+ */
+function install(args, cb) {
 
-/* receive resources from config */
-function install(res) {
+  var cwd = process.cwd()
+  var args = args || { }
+  var repo = args.repo
+  var user = args.user
+  var ref = args.ref
+  var token = args.token
+  var dirname = uuid.v4()
+  var appStream = tarStream({
 
-  return function(args, cb) {
+    user : user
+    , repo : repo
+    , ref : ref // default 'master'
+    , token : token
 
-    var args = args || { }
+  })
 
-    // args.unit = args.unit || { }
-    // var app = args.unit.app
-    // var account = args.unit.acc
-    // var version = args.unit.ver
+  var done = false
 
-    // var repo = args.req$.query.user + '/' + args.req$.query.app
+  mkdirp(path.join(cwd, conf.TMP_DIR, dirname, 'app'), pipe)
 
-    // no care for query/req stuff; assume args.user/app
-    console.log(args)
-    // request({
+  /**
+   * Pipe gzip data to tar extract command as stdin
+   */
+  function pipe(err) {
 
-    //   url : 'https://api.github.com/repos/' + repo + '/tarball'
-    //   , auth : {
-    //     'user' : 'nexxy'
-    //     , 'pass' : '313fa0324bf255d14603aec48cd9c4d0cf88348f'
-    //   }
-
-    // }).pipe(process.stdout)
-
-    // console.log(app, user)
-
-    // TODO: validate container count perms
-    // TODO: validate repo
-
-
-    // TODO: unpack & add to image
-    // return image id
-
-    cb(null, true)
+    if(err) { throw err }
+    var untar = spawn(
+        'tar'
+        , [
+          '-xzf'
+          , '-'
+          , '-C'
+          , path.join(cwd, conf.TMP_DIR, dirname, 'app')
+          , '--strip-components=1'
+        ]
+    )
+    appStream.pipe(untar.stdin)
+    untar.on('close', extracted)
   }
+
+  /**
+   * tar stream has been extracted to directory,
+   * create the Dockerfile to go along with the files
+   */
+  function extracted(err, stdout, stderr) {
+
+    if(err) { throw err }
+
+  }
+
+  // TODO: add to image
+  // return image id
+  done = true
+  cb(null, true)
 }
