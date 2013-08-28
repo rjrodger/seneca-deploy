@@ -10,7 +10,7 @@ module.exports = tarball;
  * @param {String} opts.user github username to fetch tarball from
  * @param {String} opts.repo github repository to fetch tarball from
  * @param {Object} [opts.auth] Auth object for basic auth to private repo
- * @param {String} [opts.token] OAuth token for access to private repos
+ * @param {String} [opts.token] OAuth token for auth to private repos
  * @param {Object} [opts.headers] Additional headers for request
  */
 function tarball(opts) {

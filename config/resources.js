@@ -2,8 +2,8 @@ var util = require('util')
 module.exports = resources;
 
 /**
- * Return an object containing functions for
- * producing Docker endpoints for a given Docker task.
+ * Return an object containing functions to
+ * produce Docker endpoints for each Docker task.
  * @param {Object} config configuration object to use for URL definitions
  * @param {String} config.host Required hostname of docker daemon
  * @param {String} config.port Required port of docker daemon
