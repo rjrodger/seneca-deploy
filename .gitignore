@@ -13,3 +13,8 @@ results
 
 npm-debug.log
 incoming
+
+*~
+node_modules
+test/db/sys_entity
+test/db/farm_machine
